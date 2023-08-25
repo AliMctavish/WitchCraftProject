@@ -70,7 +70,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void processInput(GLFWwindow* window)
 {
 
-	const float cameraSpeed = 0.005f; // adjust accordingly
+	const float cameraSpeed = 0.05f; // adjust accordingly
 	const float rotaionSpeed = 0.001f; // adjust accordingly
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPos += cameraSpeed * cameraFront;
@@ -156,7 +156,7 @@ int main(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
-	stbi_uc* data = stbi_load("wall.jpg", &width, &height, &nrChannels, 0);
+	stbi_uc* data = stbi_load("surfaceTexture.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -177,10 +177,10 @@ int main(void)
 	glBindTexture(GL_TEXTURE_2D, texture2);
 
 
-	stbi_uc* data2 = stbi_load(".png", &width, &height, &nrChannels, 0);
+	stbi_uc* data2 = stbi_load("sideTexture.jpg", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -194,19 +194,20 @@ int main(void)
 	//HERE IS THE DRAWING DETAILS
 	float vertices[] =
 	{
-		//POSITIONS   //COLORS   //TEXTURE
-		-0.5,-0.5,0,   1,1,1,	 1.0f,1.0f, //0
-		-0.5, 0.5,0,   1,1,1,	 1.0f,0.0f,	//1
-		 0.5, 0.5,0,   1,0,1,	 0.0f,0.0f,	//2
-		 0.5,-0.5,0,   1,1,0,	 0.0f,1.0f,	//3
-		 0.5,-0.5,1,   1,0,1,	 1.0f,1.0f,	//4
-		 0.5,0.5,1,    1,1,0,	 1.0f,0.0f,	//5
-		 -0.5,0.5,1,   1,0,1,	 0.0f,0.0f,	//6
-		 -0.5,-0.5,1,  0,1,1,	 0.0f,1.0f,	//7
-		 -0.5,0.5,1,   1,1,0,	 1.0f,1.0f,	//8
-		 0.5,0.5,1,    1,1,1,	 0.0f,1.0f,	//9
-		 -0.5,-0.5,1,  0,1,1,	 1.0f,0.0f,	//10
-		 0.5,-0.5,1,  1,1,0,	 0.0f,0.0f,	//11
+		//POSITIONS   //COLORS   //TEXTURE  //SIDE_TEXTURE
+		-0.5,-0.5,0,   1,1,1,	 1.0f,1.0f, 1.0f,1.0f, //0
+		-0.5, 0.5,0,   1,1,1,	 1.0f,0.0f, 1.0f,0.0f, //1 //FRONT_TOP?
+		 0.5, 0.5,0,   1,0,1,	 0.0f,0.0f, 0.0f,0.0f, //2
+		 0.5,-0.5,0,   1,1,0,	 0.0f,1.0f, 0.0f,1.0f, //3 //FRONT_SIDE
+		 0.5,-0.5,1,   1,0,1,	 1.0f,1.0f, 1.0f,1.0f, //4 //LEFT_SIDE
+		 0.5,0.5,1,    1,1,0,	 1.0f,0.0f, 1.0f,0.0f, //5 //LEFT_sIDE_2
+		 -0.5,0.5,1,   1,0,1,	 0.0f,0.0f, 0.0f,0.0f, //6
+		 -0.5,-0.5,1,  0,1,1,	 0.0f,1.0f, 0.0f,1.0f, //7 //RIGHT_SIDE
+		 -0.5,0.5,1,   1,1,0,	 1.0f,1.0f, 0.0f,0.0f, //8
+		 0.5,0.5,1,    1,1,1,	 0.0f,1.0f, 0.0f,0.0f, //9 //TOP ? 
+		 -0.5,-0.5,1,  0,1,1,	 1.0f,0.0f, 0.0f,0.0f, //10 
+		 0.5,-0.5,1,   1,1,0,	 0.0f,0.0f, 0.0f,0.0f, //11
+		 -0.5,0.5,0,   1,1,0,	 1.0f,0.0f, 0.0f,0.0f, //12
 	};
 	unsigned int indecies[] =
 	{
@@ -216,12 +217,12 @@ int main(void)
 		4,2,5,
 		0,1,6,
 		0,6,7,
-		1,2,8,
+		12,2,8,
 		8,2,9,
 		7,6,5,
 		5,7,4,
-		0,3,10,
-		10,3,11,
+		0,3,10, //BUTTOM
+		10,3,11,//BUTTOM_2
 	};
 
 	unsigned int VAO;
@@ -237,12 +238,14 @@ int main(void)
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)(8 * sizeof(float)));
+	glEnableVertexAttribArray(3);
 
 	Shader shader("VertexShader.shader", "FragmentShader.shader");
 
@@ -259,25 +262,14 @@ int main(void)
 
 	std::vector<glm::vec3> cubes;
 
-	for (unsigned int i = 1; i < 5; i++)
-		for (unsigned int j = 1; j < 5; j++)
-			for (unsigned int k = 1; k < 5; k++)
-			{
-				int random_number = rand() % 10;
-				int negetive_random_number = rand() % 10 * -1;
-				cubes.push_back(glm::vec3(random_number + i, negetive_random_number, random_number + k));
-			}
+	for (unsigned int i = 1; i < 20; i++)
+		for (unsigned int j = 1; j < 20; j++)
+			for (unsigned int k = 1; k < 20; k++)
+				cubes.push_back(glm::vec3(i, 0, k));
 
-
-
-	glm::vec3 models[] =
-	{
-	glm::vec3(6.5f, 2.0f, -1.5f),
-	glm::vec3(4.3f, -2.0f, -4.5f)
-	};
 	while (!glfwWindowShouldClose(window))
 	{
-		glClearColor(0, 0, 0, 1.0);
+		glClearColor(0.9, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwSetCursorPosCallback(window, mouse_callback);
 
@@ -296,7 +288,6 @@ int main(void)
 		{
 
 			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::rotate(model, glm::radians(increase) * cubes[i].x, glm::vec3(0, 1, 0));
 			model = glm::translate(model, cubes[i]);
 
 			shader.set4Float("distance_color", cubes[i].x * sin(increase2) / 4, cubes[i].y * sin(increase2) / 4, cubes[i].z * sin(increase2) / 4, 1);
