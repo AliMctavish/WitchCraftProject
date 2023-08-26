@@ -23,6 +23,7 @@ glm::vec3 cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 glm::vec3 direction;
+glm::vec3 cameraRight = glm::normalize(glm::cross(cameraFront, cameraUp));
 
 float yaw = 1;
 float pitch = 1;
@@ -73,9 +74,9 @@ void processInput(GLFWwindow* window)
 	const float cameraSpeed = 0.05f; // adjust accordingly
 	const float rotaionSpeed = 0.001f; // adjust accordingly
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraFront;
+		cameraPos += cameraSpeed * glm::normalize(glm::cross(cameraRight,cameraUp));
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraFront;
+		cameraPos -= cameraSpeed ;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -207,7 +208,7 @@ int main(void)
 		 0.5,0.5,1,    1,1,1,	 0.0f,1.0f, 0.0f,0.0f, //9 //TOP ? 
 		 -0.5,-0.5,1,  0,1,1,	 1.0f,0.0f, 0.0f,0.0f, //10 
 		 0.5,-0.5,1,   1,1,0,	 0.0f,0.0f, 0.0f,0.0f, //11
-		 -0.5,0.5,0,   1,1,0,	 1.0f,0.0f, 0.0f,0.0f, //12
+		 -0.5,0.5,0,   1,1,0,	 1.0f,0.0f, 0.0f,0.0f, //12 // THIS IS AN EXTRA TEXUTRE JUST TO FIX STUFF
 	};
 	unsigned int indecies[] =
 	{
@@ -265,7 +266,12 @@ int main(void)
 	for (unsigned int i = 1; i < 20; i++)
 		for (unsigned int j = 1; j < 20; j++)
 			for (unsigned int k = 1; k < 20; k++)
-				cubes.push_back(glm::vec3(i, 0, k));
+				if (j == 2)
+					cubes.push_back(glm::vec3(i, j, k));
+				else
+					cubes.push_back(glm::vec3(i, j, 0));
+
+
 
 	while (!glfwWindowShouldClose(window))
 	{
