@@ -12,6 +12,6 @@ uniform vec4 distance_color;
 
 void main()
 {
-	color = mix(texture(textureFrag , vec2(ourTexture.x , ourTexture.y)) , texture(textureFrag2 , vec2(ourTexture2.x, ourTexture2.y)) , 0.5);
+	color = mix(texture(textureFrag , vec2(ourTexture.x , ourTexture.y)) , texture(textureFrag2 , vec2(ourTexture2.x, ourTexture2.y)) , 0.5f);
 	//color = distance_color;
 }

@@ -1,10 +1,7 @@
 #include <iostream>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "Shader.h"
+#include "Texture.h"
 #include <vector>
-#include "TextureLoader.h"
+#include "Cube.h"
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH  1200
@@ -19,6 +16,10 @@ float increase2 = 0;
 float fov = 0;
 float lastX = 400, lastY = 300;
 bool firstMouse = false;
+const float cameraSpeed = 0.05f; // adjust accordingly
+const float gravity = 0.098f;
+bool Pressed = false;
+
 glm::vec3 cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -71,20 +72,19 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void processInput(GLFWwindow* window)
 {
 
-	const float cameraSpeed = 0.05f; // adjust accordingly
-	const float rotaionSpeed = 0.001f; // adjust accordingly
+
+	//EXTRA COMPUTATION MAYBE FIX LATER ? 
+	//TODO: MAKE ANOTHER TRICK TO FIX THE EXTRA COMPUTATION IN HERE!
+	cameraRight = glm::normalize(glm::cross(cameraFront, cameraUp));
+
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * glm::normalize(glm::cross(cameraRight,cameraUp));
+		cameraPos -= glm::normalize(glm::cross(cameraRight, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed ;
+		cameraPos += glm::normalize(glm::cross(cameraRight, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-		cameraPos += cameraUp * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
-		cameraPos -= cameraUp * cameraSpeed;
 
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -102,18 +102,10 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		vertical_directions -= 0.01f;
 
-
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		fov += 0.01f;
-
-	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
-		fov -= 0.01f;
-
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		isMoving = false;
 	else
 		isMoving = true;
-
 }
 
 int main(void)
@@ -144,52 +136,10 @@ int main(void)
 		std::cout << "something went wrong with glad !" << std::endl;
 		return -1;
 	}
+	
+	Texture texutre("surfaceTexture.jpg",GL_RGB);
+	Texture texutre2("sideTexture.jpg",GL_RGB);
 
-
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int width, height, nrChannels;
-	stbi_uc* data = stbi_load("surfaceTexture.jpg", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-
-
-
-	unsigned int texture2;
-	glGenTextures(1, &texture2);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-
-
-	stbi_uc* data2 = stbi_load("sideTexture.jpg", &width, &height, &nrChannels, 0);
-	if (data2)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "failed to load the image file" << std::endl;
-	}
-
-	stbi_image_free(data2);
 	glEnable(GL_DEPTH_TEST);
 
 	//HERE IS THE DRAWING DETAILS
@@ -210,6 +160,7 @@ int main(void)
 		 0.5,-0.5,1,   1,1,0,	 0.0f,0.0f, 0.0f,0.0f, //11
 		 -0.5,0.5,0,   1,1,0,	 1.0f,0.0f, 0.0f,0.0f, //12 // THIS IS AN EXTRA TEXUTRE JUST TO FIX STUFF
 	};
+
 	unsigned int indecies[] =
 	{
 		0,1,2,
@@ -252,7 +203,6 @@ int main(void)
 
 	shader.UnBind();
 	glUniform1i(glGetUniformLocation(shader.shader_program, "textureFrag"), 0); // set it manually
-	shader.setInt("textureFrag2", 1); // or with shader class
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -261,23 +211,29 @@ int main(void)
 	/* Loop until the user closes the window */
 
 
-	std::vector<glm::vec3> cubes;
+	std::vector<Cube> cubes;
 
-	for (unsigned int i = 1; i < 20; i++)
-		for (unsigned int j = 1; j < 20; j++)
-			for (unsigned int k = 1; k < 20; k++)
-				if (j == 2)
-					cubes.push_back(glm::vec3(i, j, k));
-				else
-					cubes.push_back(glm::vec3(i, j, 0));
+	for (unsigned int i = 1; i < 50; i++)
+	{
+		for (unsigned int j = 1; j < 50; j++)
+		{
+			Cube cube(glm::vec3(i, -5, j));
+			cube.SetOscillateValue(i + j);
+			cubes.push_back(cube);
+		}
+	}
 
 
-
+	Cube cube(glm::vec3(2, 2, 2));
+	Cube cube2(glm::vec3(2, 2, 4));
+	cube.SetOscillateValue(20);
+	cube2.SetOscillateValue(2);
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.9, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwSetCursorPosCallback(window, mouse_callback);
+
 
 
 		shader.Bind();
@@ -292,25 +248,30 @@ int main(void)
 		//models
 		for (unsigned int i = 0; i < cubes.size(); i++)
 		{
+			cubes[i].Update(shader.shader_program);
+			cubes[i].Oscillate();
 
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubes[i]);
+			if (cameraPos.y > cubes[i].GetPosition().y + 2)
+				cameraPos -= cameraUp * 0.00001f;
 
-			shader.set4Float("distance_color", cubes[i].x * sin(increase2) / 4, cubes[i].y * sin(increase2) / 4, cubes[i].z * sin(increase2) / 4, 1);
-
-			int modelLoc = glGetUniformLocation(shader.shader_program, "model");
-			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !Pressed)
+			cubes.pop_back();
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !Pressed)
+		{
+			Cube cube(cameraPos);
+			cube.Rotate(pitch, glm::vec3(0, 0, 1));
+			cubes.push_back(cube);
+		}
+		//gravity 
+		cube.Update(shader.shader_program);
+		cube2.Update(shader.shader_program);
+
+		cube.Oscillate();
+		cube2.Oscillate();
 
 		glm::mat4 view;
-		const float radius = 10.0f;
-		float camX = sin(glfwGetTime() * 0.01) * radius;
-		float camZ = cos(glfwGetTime() * 0.01) * radius;
-
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
+		view = glm::lookAt(cameraPos,cameraFront + cameraPos, cameraUp);
 
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), 1200.f / 800.f, 0.1f, 100.0f);
@@ -320,10 +281,6 @@ int main(void)
 		int projectionLoc = glGetUniformLocation(shader.shader_program, "projection");
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		shader.set4Float("colorTest", 1, 1, 0, 1);
-		//shader.setFloat("Xoffset", horizontal_directions);
-		//shader.setFloat("Yoffset", vertical_directions);
-		//shader.setFloat("Zoffset", resize);
 		shader.setInt("textureFrag", 0); // or with shader class
 		shader.setInt("textureFrag2", 1); // or with shader class
 
