@@ -15,7 +15,7 @@ public :
 	void Rotate(float angle, glm::vec3 side);
 	void Transform(glm::vec3 position);
 	void Oscillate();
-	const inline void SetOscillateValue(float moveAmount) { _move_amount = moveAmount	; }
+	const inline void SetOscillateValue(float moveAmount) { _move_amount = moveAmount; }
 	glm::vec3 GetPosition();
 	~Cube();
 };

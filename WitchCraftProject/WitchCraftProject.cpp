@@ -10,15 +10,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 float horizontal_directions = 0;
 float vertical_directions = 0;
 float resize = 0;
-bool isMoving = true;
-float increase = 0;
-float increase2 = 0;
-float fov = 0;
 float lastX = 400, lastY = 300;
 bool firstMouse = false;
 const float cameraSpeed = 0.05f; // adjust accordingly
 const float gravity = 0.098f;
-bool Pressed = false;
+float velocity = 0.5f;
 
 glm::vec3 cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -87,6 +83,12 @@ void processInput(GLFWwindow* window)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 
 
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+		cameraPos.y += cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+		cameraPos.y -= cameraSpeed;
+
+
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
@@ -102,10 +104,6 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		vertical_directions -= 0.01f;
 
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		isMoving = false;
-	else
-		isMoving = true;
 }
 
 int main(void)
@@ -136,9 +134,7 @@ int main(void)
 		std::cout << "something went wrong with glad !" << std::endl;
 		return -1;
 	}
-	
-	Texture texutre("surfaceTexture.jpg",GL_RGB);
-	Texture texutre2("sideTexture.jpg",GL_RGB);
+
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -202,6 +198,7 @@ int main(void)
 	Shader shader("VertexShader.shader", "FragmentShader.shader");
 
 	shader.UnBind();
+	glBindVertexArray(0);
 	glUniform1i(glGetUniformLocation(shader.shader_program, "textureFrag"), 0); // set it manually
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -210,71 +207,65 @@ int main(void)
 
 	/* Loop until the user closes the window */
 
-
+	int size = 20;
 	std::vector<Cube> cubes;
-
-	for (unsigned int i = 1; i < 50; i++)
+	int counter = 0;
+	for (unsigned int i = 1; i < size; i++)
 	{
-		for (unsigned int j = 1; j < 50; j++)
+		for (unsigned int j = 1; j < size; j++)
 		{
-			Cube cube(glm::vec3(i, -5, j));
-			cube.SetOscillateValue(i + j);
-			cubes.push_back(cube);
+			for (unsigned int k = 1; k < size; k++)
+			{
+				counter++;
+				Cube cube(glm::vec3(i, j, k));
+				cubes.push_back(cube);
+			}
 		}
 	}
 
+	Texture texutre("Assets/surfaceTexture.jpg", GL_RGB);
+	Texture texutre2("Assets/sideTexture.jpg", GL_RGB);
 
-	Cube cube(glm::vec3(2, 2, 2));
-	Cube cube2(glm::vec3(2, 2, 4));
-	cube.SetOscillateValue(20);
-	cube2.SetOscillateValue(2);
+
+	for (unsigned int i = 0; i < cubes.size() - 1; i++)
+	{
+		if (cubes[i].GetPosition().y < cubes[i + 1].GetPosition().y)
+			cubes[i + 1].Transform(glm::vec3(3, 3, 3));
+	}
+
 	while (!glfwWindowShouldClose(window))
 	{
-		glClearColor(0.9, 1, 1, 1.0);
+		glClearColor(0.8, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwSetCursorPosCallback(window, mouse_callback);
 
-
-
 		shader.Bind();
-
-		if (isMoving)
-			increase += 0.001f;
-
-		increase2 += 0.001f;
-
 		glBindVertexArray(VAO);
+
 
 		//models
 		for (unsigned int i = 0; i < cubes.size(); i++)
 		{
 			cubes[i].Update(shader.shader_program);
-			cubes[i].Oscillate();
-
-			if (cameraPos.y > cubes[i].GetPosition().y + 2)
-				cameraPos -= cameraUp * 0.00001f;
-
 		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !Pressed)
+
+
+
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && cubes.size() > 0)
 			cubes.pop_back();
-		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !Pressed)
+
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		{
 			Cube cube(cameraPos);
 			cube.Rotate(pitch, glm::vec3(0, 0, 1));
 			cubes.push_back(cube);
 		}
-		//gravity 
-		cube.Update(shader.shader_program);
-		cube2.Update(shader.shader_program);
-
-		cube.Oscillate();
-		cube2.Oscillate();
 
 		glm::mat4 view;
-		view = glm::lookAt(cameraPos,cameraFront + cameraPos, cameraUp);
+		view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
 
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), 1200.f / 800.f, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(45.0f), 1200.f / 800.f, 0.1f, 10000.0f);
 
 		int viewLoc = glGetUniformLocation(shader.shader_program, "view");
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -283,6 +274,8 @@ int main(void)
 
 		shader.setInt("textureFrag", 0); // or with shader class
 		shader.setInt("textureFrag2", 1); // or with shader class
+
+		glBindVertexArray(0);
 
 		processInput(window);
 		/* Swap front and back buffers */

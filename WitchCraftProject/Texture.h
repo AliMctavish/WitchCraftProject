@@ -9,6 +9,7 @@ private:
 	unsigned int _texture;
 public:
 	void Init();
+	void SetTexutre(std::string fileName);
 	Texture(const char* fileName, int type);
 	~Texture();
 };
