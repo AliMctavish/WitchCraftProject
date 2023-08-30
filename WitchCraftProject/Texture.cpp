@@ -1,10 +1,17 @@
 #include "Texture.h"
 #include "TextureLoader.h"
 
+void Texture::Bind()
+{
+	glActiveTexture(GL_TEXTURE0 + _texutreCounter);
+	glBindTexture(GL_TEXTURE_2D, _texture);
+}
+
 
 void Texture::Init()
 {
 	glGenTextures(1, &_texture);
+
 	glActiveTexture(GL_TEXTURE0 + _texutreCounter);
 	glBindTexture(GL_TEXTURE_2D, _texture);
 
@@ -14,11 +21,14 @@ void Texture::Init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	_texutreCounter += 1;
+
+	_textureIndex = _texutreCounter;
 }
 
 Texture::Texture(const char* fileName , int type)
 {
 	this->Init();
+
 
 	stbi_uc* data = stbi_load(fileName, &width, &height, &nrChannels, 0);
 
@@ -31,6 +41,8 @@ Texture::Texture(const char* fileName , int type)
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
+	stbi_set_flip_vertically_on_load(true);
+
 	stbi_image_free(data);
 }
 

@@ -135,42 +135,64 @@ int main(void)
 		return -1;
 	}
 
-
 	glEnable(GL_DEPTH_TEST);
 
 	//HERE IS THE DRAWING DETAILS
 	float vertices[] =
 	{
-		//POSITIONS   //COLORS   //TEXTURE  //SIDE_TEXTURE
-		-0.5,-0.5,0,   1,1,1,	 1.0f,1.0f, 1.0f,1.0f, //0
-		-0.5, 0.5,0,   1,1,1,	 1.0f,0.0f, 1.0f,0.0f, //1 //FRONT_TOP?
-		 0.5, 0.5,0,   1,0,1,	 0.0f,0.0f, 0.0f,0.0f, //2
-		 0.5,-0.5,0,   1,1,0,	 0.0f,1.0f, 0.0f,1.0f, //3 //FRONT_SIDE
-		 0.5,-0.5,1,   1,0,1,	 1.0f,1.0f, 1.0f,1.0f, //4 //LEFT_SIDE
-		 0.5,0.5,1,    1,1,0,	 1.0f,0.0f, 1.0f,0.0f, //5 //LEFT_sIDE_2
-		 -0.5,0.5,1,   1,0,1,	 0.0f,0.0f, 0.0f,0.0f, //6
-		 -0.5,-0.5,1,  0,1,1,	 0.0f,1.0f, 0.0f,1.0f, //7 //RIGHT_SIDE
-		 -0.5,0.5,1,   1,1,0,	 1.0f,1.0f, 0.0f,0.0f, //8
-		 0.5,0.5,1,    1,1,1,	 0.0f,1.0f, 0.0f,0.0f, //9 //TOP ? 
-		 -0.5,-0.5,1,  0,1,1,	 1.0f,0.0f, 0.0f,0.0f, //10 
-		 0.5,-0.5,1,   1,1,0,	 0.0f,0.0f, 0.0f,0.0f, //11
-		 -0.5,0.5,0,   1,1,0,	 1.0f,0.0f, 0.0f,0.0f, //12 // THIS IS AN EXTRA TEXUTRE JUST TO FIX STUFF
+	//3 FACES             //2D TEXTURE  //INDEX
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,	//FRONT_FACE
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,	//FRONT_FACE
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	//FRONT_FACE
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	//FRONT_FACE
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,	//FRONT_FACE
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,	//FRONT_FACE
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, ////BACK_FACE
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, ////BACK_FACE
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, ////BACK_FACE
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, ////BACK_FACE
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f, ////BACK_FACE
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, ////BACK_FACE
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, //SIDES
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+	-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, //SIDES
+	-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+	 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, //SIDES
+	 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+	 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, //SIDES
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+
+	-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 2.0f, //TOP
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 2.0f, //TOP
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 2.0f, //TOP
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 2.0f, //TOP
+	-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 2.0f, //TOP
+	-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 2.0f, //TOP
+
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, //BUTTOM
+	 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, //BUTTOM
+	 0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, //BUTTOM
+	 0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, //BUTTOM
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, //BUTTOM
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, //BUTTOM
 	};
 
-	unsigned int indecies[] =
+	unsigned int indecies[] = 
 	{
 		0,1,2,
-		2,0,3,
-		3,2,4,
-		4,2,5,
-		0,1,6,
-		0,6,7,
-		12,2,8,
-		8,2,9,
-		7,6,5,
-		5,7,4,
-		0,3,10, //BUTTOM
-		10,3,11,//BUTTOM_2
+		2,3,1,
+		4,5,6,
+		6,7,5,
+		5,4,0,
+		2,5,6,
+
 	};
 
 	unsigned int VAO;
@@ -186,20 +208,29 @@ int main(void)
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, (void*)(8 * sizeof(float)));
-	glEnableVertexAttribArray(3);
+
+
+
 
 	Shader shader("VertexShader.shader", "FragmentShader.shader");
 
+	Texture texutre("Assets/surfaceTexture.jpg", GL_RGB);
+	Texture texutre2("Assets/sideTexture.jpg", GL_RGB);
+	Texture texutre3("Assets/dirtTexture.jpg", GL_RGB);
+
+
+	auto loc = glGetUniformLocation(shader.shader_program, "textureFrag");
+	int samplers[3] = { 0,1,2 };
+	glUniform1iv(loc, 3, samplers);
+
 	shader.UnBind();
 	glBindVertexArray(0);
-	glUniform1i(glGetUniformLocation(shader.shader_program, "textureFrag"), 0); // set it manually
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -223,8 +254,7 @@ int main(void)
 		}
 	}
 
-	Texture texutre("Assets/surfaceTexture.jpg", GL_RGB);
-	Texture texutre2("Assets/sideTexture.jpg", GL_RGB);
+	
 
 
 	for (unsigned int i = 0; i < cubes.size() - 1; i++)
@@ -242,6 +272,14 @@ int main(void)
 		shader.Bind();
 		glBindVertexArray(VAO);
 
+
+		texutre.Bind();
+		texutre2.Bind();
+		texutre3.Bind();
+		//glBindTexture(0, texutre.GetTextureId());
+		//glBindTexture(1, texutre2.GetTextureId());
+
+	
 
 		//models
 		for (unsigned int i = 0; i < cubes.size(); i++)
@@ -272,9 +310,8 @@ int main(void)
 		int projectionLoc = glGetUniformLocation(shader.shader_program, "projection");
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		shader.setInt("textureFrag", 0); // or with shader class
-		shader.setInt("textureFrag2", 1); // or with shader class
 
+		
 		glBindVertexArray(0);
 
 		processInput(window);

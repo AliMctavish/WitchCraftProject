@@ -1,17 +1,19 @@
 #version 330 core
 
+//out vec4 color;
 out vec4 color;
 in  vec3 ourColor;
 in vec2 ourTexture;
-in vec2 ourTexture2;
+in float ourTexIndex;
 
 uniform vec4 colorTest;
-uniform sampler2D textureFrag;
-uniform sampler2D textureFrag2;
+uniform sampler2D textureFrag[3];
 uniform vec4 distance_color;
 
 void main()
 {
-	color = mix(texture(textureFrag , vec2(ourTexture.x , ourTexture.y)) , texture(textureFrag2 , vec2(ourTexture2.x, ourTexture2.y)) , 0.5f);
+	int index = int(ourTexIndex);
+	//color = vec4(ourTexIndex, ourTexIndex, ourTexIndex, 1.0);
+	color = texture(textureFrag[index], ourTexture);
 	//color = distance_color;
 }
