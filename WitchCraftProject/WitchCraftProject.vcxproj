@@ -118,13 +118,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AddtionalIncludeDirectories)%</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\pc\source\repos\AliMctavish\WitchCraftProject\WitchCraftProject\Libraries\include;%(AddtionalIncludeDirectories)%</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\pc\source\repos\AliMctavish\WitchCraftProject\WitchCraftProject\Libraries\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -161,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="GlmIncludes.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />

@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include <vector>
 #include "Cube.h"
+#include "Geometry.h"
 
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH  1200
@@ -138,53 +139,16 @@ int main(void)
 	glEnable(GL_DEPTH_TEST);
 
 	//HERE IS THE DRAWING DETAILS
-	float vertices[] =
-	{
-	//3 FACES             //2D TEXTURE  //INDEX
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,	//FRONT_FACE
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,	//FRONT_FACE
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	//FRONT_FACE
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	//FRONT_FACE
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,	//FRONT_FACE
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,	//FRONT_FACE
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, ////BACK_FACE
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, ////BACK_FACE
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, ////BACK_FACE
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, ////BACK_FACE
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f, ////BACK_FACE
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, ////BACK_FACE
+	float* vertices = Geometry::MakeCubeVertices();
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, //SIDES
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
-	-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, //SIDES
-	-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+	float be[216];
 
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
-	 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, //SIDES
-	 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
-	 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, //SIDES
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+	for (int i = 0; i < sizeof(be); i++)
+		be[i] = {vertices[i]};
 
-	-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 2.0f, //TOP
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 2.0f, //TOP
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 2.0f, //TOP
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 2.0f, //TOP
-	-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 2.0f, //TOP
-	-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 2.0f, //TOP
 
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, //BUTTOM
-	 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, //BUTTOM
-	 0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, //BUTTOM
-	 0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, //BUTTOM
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, //BUTTOM
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, //BUTTOM
-	};
-
-	unsigned int indecies[] = 
+	unsigned int indecies[] =
 	{
 		0,1,2,
 		2,3,1,
@@ -207,7 +171,7 @@ int main(void)
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(be), &be, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(3 * sizeof(float)));
@@ -254,8 +218,6 @@ int main(void)
 		}
 	}
 
-	
-
 
 	for (unsigned int i = 0; i < cubes.size() - 1; i++)
 	{
@@ -279,7 +241,7 @@ int main(void)
 		//glBindTexture(0, texutre.GetTextureId());
 		//glBindTexture(1, texutre2.GetTextureId());
 
-	
+
 
 		//models
 		for (unsigned int i = 0; i < cubes.size(); i++)
@@ -311,7 +273,7 @@ int main(void)
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 
-		
+
 		glBindVertexArray(0);
 
 		processInput(window);
