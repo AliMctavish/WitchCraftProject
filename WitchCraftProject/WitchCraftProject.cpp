@@ -140,13 +140,18 @@ int main(void)
 
 	//HERE IS THE DRAWING DETAILS
 
-	float* vertices = Geometry::MakeCubeVertices();
+	//float* vertices = Geometry::MakeCubeVertices();
 
-	float be[216];
+	//float be[216];
 
-	for (int i = 0; i < sizeof(be); i++)
-		be[i] = {vertices[i]};
+	//for (int i = 0; i < sizeof(be); i++)
+		//be[i] = {vertices[i]};
 
+
+
+	struct vertex;
+
+	float vertices[250];
 
 	unsigned int indecies[] =
 	{
@@ -171,7 +176,9 @@ int main(void)
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(be), &be, GL_STATIC_DRAW);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), nullptr, GL_DYNAMIC_DRAW);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(3 * sizeof(float)));
@@ -202,7 +209,7 @@ int main(void)
 
 	/* Loop until the user closes the window */
 
-	int size = 20;
+	int size = 10;
 	std::vector<Cube> cubes;
 	int counter = 0;
 	for (unsigned int i = 1; i < size; i++)
@@ -224,7 +231,7 @@ int main(void)
 		if (cubes[i].GetPosition().y < cubes[i + 1].GetPosition().y)
 			cubes[i + 1].Transform(glm::vec3(3, 3, 3));
 	}
-
+	float num = 0.1f;
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.8, 1, 1, 1.0);
@@ -233,6 +240,57 @@ int main(void)
 
 		shader.Bind();
 		glBindVertexArray(VAO);
+
+
+		float vertices2[] = {
+				//3 FACES             //2D TEXTURE  //INDEX
+				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,	//FRONT_FACE
+				 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,	//FRONT_FACE
+				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	//FRONT_FACE
+				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	//FRONT_FACE
+				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,	//FRONT_FACE
+				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,	//FRONT_FACE
+
+				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, ////BACK_FACE
+				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, ////BACK_FACE
+				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, ////BACK_FACE
+				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, ////BACK_FACE
+				-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f, ////BACK_FACE
+				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, ////BACK_FACE
+
+				-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, //SIDES
+				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+				-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, //SIDES
+				-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+
+				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+				 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, //SIDES
+				 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+				 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, //SIDES
+				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, //SIDES
+				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, //SIDES
+
+				-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 2.0f, //TOP
+				 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 2.0f, //TOP
+				 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 2.0f, //TOP
+				 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 2.0f, //TOP
+				-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 2.0f, //TOP
+				-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 2.0f, //TOP
+
+				-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, //BUTTOM
+				 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, //BUTTOM
+				 0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, //BUTTOM
+				 0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, //BUTTOM
+				-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, //BUTTOM
+				-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, //BUTTOM
+			}; 
+
+
+		glBindBuffer(GL_ARRAY_BUFFER,VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices2), vertices2);
+
 
 
 		texutre.Bind();
