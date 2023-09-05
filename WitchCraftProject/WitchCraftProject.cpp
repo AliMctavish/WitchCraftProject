@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include <vector>
 #include "Cube.h"
+#include <array>
 #include "Geometry.h"
 
 #define WINDOW_HEIGHT 800
@@ -15,6 +16,8 @@ float lastX = 400, lastY = 300;
 bool firstMouse = false;
 const float cameraSpeed = 0.05f; // adjust accordingly
 const float gravity = 0.098f;
+const int data_size = 43200;
+
 float velocity = 0.5f;
 
 glm::vec3 cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
@@ -126,13 +129,13 @@ struct Vertex {
 	vec3 Position;
 	vec2 TexturePosition;
 	float TextureIndex;
+
 };
 
 
 
-static std::vector<Vertex> CreateCube(float x, float y, float z)
+static std::array<Vertex, 36> CreateCube(float x, float y, float z)
 {
-
 	float size = 1.0f;
 	//FRONT_FACE
 	Vertex v0;
@@ -178,74 +181,74 @@ static std::vector<Vertex> CreateCube(float x, float y, float z)
 	v9.TexturePosition = { 1.0f,1.0f };
 	v9.TextureIndex = 1.0f;
 	Vertex v10;
-	v10.Position = { -0.5f + x,  0.5f + y,  0.5f + z};
+	v10.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
 	v10.TexturePosition = { 0.0f, 1.0f };
 	v10.TextureIndex = 1.0f;
 	Vertex v11;
-	v11.Position = { -0.5f + x, -0.5f + y,  0.5f + z};
+	v11.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
 	v11.TexturePosition = { 0.0f, 0.0f };
 	v11.TextureIndex = 1.0f;
 	//SIDES
 	Vertex v12;
-	v12.Position = { -0.5f + x,  0.5f + y,  0.5f + z};
+	v12.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
 	v12.TexturePosition = { 1.0f, 1.0f };
 	v12.TextureIndex = 1.0f;
 	Vertex v13;
-	v13.Position = { -0.5f + x,  0.5f + y, -0.5f + z};
+	v13.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
 	v13.TexturePosition = { 0.0f, 1.0f };
 	v13.TextureIndex = 1.0f;
 	Vertex v14;
-	v14.Position = { -0.5f + x, -0.5f + y, -0.5f + z};
+	v14.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
 	v14.TexturePosition = { 0.0f, 0.0f };
 	v14.TextureIndex = 1.0f;
 	Vertex v15;
-	v15.Position = { -0.5f + x, -0.5f + y, -0.5f + z};
+	v15.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
 	v15.TexturePosition = { 0.0f, 0.0f };
 	v15.TextureIndex = 1.0f;
 	Vertex v16;
-	v16.Position = { -0.5f + x, -0.5f + y,  0.5f + z};
+	v16.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
 	v16.TexturePosition = { 1.0f, 0.0f };
 	v16.TextureIndex = 1.0f;
 	Vertex v17;
-	v17.Position = { -0.5f + x,  0.5f + y,  0.5f + z};
+	v17.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
 	v17.TexturePosition = { 1.0f, 1.0f };
 	v17.TextureIndex = 1.0f;
 	//SIDES_2
 	Vertex v18;
-	v18.Position = { 0.5f + x,  0.5f + y,  0.5f + z};
+	v18.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
 	v18.TexturePosition = { 1.0f, 1.0f };
 	v18.TextureIndex = 1.0f;
 	Vertex v19;
-	v19.Position = { 0.5f + x,  0.5f + y, -0.5f + z};
+	v19.Position = { 0.5f + x,  0.5f + y, -0.5f + z };
 	v19.TexturePosition = { 0.0f, 1.0f };
 	v19.TextureIndex = 1.0f;
 	Vertex v20;
-	v20.Position = { 0.5f + x, -0.5f + y, -0.5f + z};
+	v20.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
 	v20.TexturePosition = { 0.0f, 0.0f };
 	v20.TextureIndex = 1.0f;
 	Vertex v21;
-	v21.Position = { 0.5f + x, -0.5f + y, -0.5f + z};
+	v21.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
 	v21.TexturePosition = { 0.0f, 0.0f };
 	v21.TextureIndex = 1.0f;
 	Vertex v22;
-	v22.Position = { 0.5f + x, -0.5f + y,  0.5f + z};
+	v22.Position = { 0.5f + x, -0.5f + y,  0.5f + z };
 	v22.TexturePosition = { 1.0f, 0.0f };
 	v22.TextureIndex = 1.0f;
 	Vertex v23;
-	v23.Position = { 0.5f + x,  0.5f + y,  0.5f + z};
+	v23.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
 	v23.TexturePosition = { 1.0f, 1.0f };
 	v23.TextureIndex = 1.0f;
 	//TOP
 	Vertex v24;
-	v24.Position = { -0.5f + x, -0.5f + y, -0.5f + z};
+	v24.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
 	v24.TexturePosition = { 1.0f, 1.0f };
 	v24.TextureIndex = 2.0f;
 	Vertex v25;
-	v25.Position = { 0.5f + x, -0.5f + y, -0.5f + z};
+	v25.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
 	v25.TexturePosition = { 0.0f, 1.0f };
 	v25.TextureIndex = 2.0f;
 	Vertex v26;
-	v26.Position = { 0.5f + x, -0.5f + y,  0.5f + z};
+	v26.Position = { 0.5f + x, -0.5f + y,  0.5f + z };
 	v26.TexturePosition = { 0.0f, 0.0f };
 	v26.TextureIndex = 2.0f;
 	Vertex v27;
@@ -253,36 +256,36 @@ static std::vector<Vertex> CreateCube(float x, float y, float z)
 	v27.TexturePosition = { 0.0f, 0.0f };
 	v27.TextureIndex = 2.0f;
 	Vertex v28;
-	v28.Position = { -0.5f + x, -0.5f + y,  0.5f + z};
+	v28.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
 	v28.TexturePosition = { 1.0f, 0.0f };
 	v28.TextureIndex = 2.0f;
 	Vertex v29;
-	v29.Position = { -0.5f + x, -0.5f + y, -0.5f + z};
+	v29.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
 	v29.TexturePosition = { 1.0f, 1.0f };
 	v29.TextureIndex = 2.0f;
 	//BUTTOM
 	Vertex v30;
-	v30.Position = { -0.5f + x,  0.5f + y, -0.5f + z};
+	v30.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
 	v30.TexturePosition = { 1.0f, 1.0f };
 	v30.TextureIndex = 0.0f;
 	Vertex v31;
-	v31.Position = { 0.5f + x,  0.5f + y, -0.5f + z};
+	v31.Position = { 0.5f + x,  0.5f + y, -0.5f + z };
 	v31.TexturePosition = { 0.0f, 1.0f };
 	v31.TextureIndex = 0.0f;
 	Vertex v32;
-	v32.Position = { 0.5f + x,  0.5f + y,  0.5f + z};
+	v32.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
 	v32.TexturePosition = { 0.0f, 0.0f };
 	v32.TextureIndex = 0.0f;
 	Vertex v33;
-	v33.Position = { 0.5f + x,  0.5f + y,  0.5f + z};
+	v33.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
 	v33.TexturePosition = { 0.0f, 0.0f };
 	v33.TextureIndex = 0.0f;
 	Vertex v34;
-	v34.Position = { -0.5f + x,  0.5f + y,  0.5f + z};
+	v34.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
 	v34.TexturePosition = { 1.0f, 0.0f };
 	v34.TextureIndex = 0.0f;
 	Vertex v35;
-	v35.Position = { -0.5f + x,  0.5f + y, -0.5f + z};
+	v35.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
 	v35.TexturePosition = { 1.0f, 1.0f };
 	v35.TextureIndex = 0.0f;
 
@@ -328,7 +331,7 @@ int main(void)
 
 	//HERE IS THE DRAWING DETAILS
 
-	//float* vertices = Geometry::MakeCubeVertices();
+	//float* vertices = Geometry::MakeCubevertices();
 
 	//float be[216];
 
@@ -357,10 +360,9 @@ int main(void)
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * data_size, nullptr, GL_DYNAMIC_DRAW);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 1000, nullptr, GL_DYNAMIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, Vertex::Position));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
@@ -386,19 +388,17 @@ int main(void)
 
 	/* Loop until the user closes the window */
 
-	int size = 10;
+	int size = 5;
 	std::vector<Cube> cubes;
-	int counter = 0;
+	int counter_x = 1;
+	int counter_z = 1;
 	for (unsigned int i = 1; i < size; i++)
 	{
 		for (unsigned int j = 1; j < size; j++)
 		{
-			for (unsigned int k = 1; k < size; k++)
-			{
-				counter++;
-				Cube cube(glm::vec3(i, j, k));
-				cubes.push_back(cube);
-			}
+			counter_x += 20;
+			Cube cube(glm::vec3(counter_x, 0, counter_x));
+			cubes.push_back(cube);
 		}
 	}
 
@@ -409,35 +409,27 @@ int main(void)
 			cubes[i + 1].Transform(glm::vec3(3, 3, 3));
 	}
 	float num = 0.1f;
-	const int test = 24;
+
+
+	const int data = 1000;
 	while (!glfwWindowShouldClose(window))
 	{
-		Vertex vertices[36 * test];
+		Vertex vertices[36 * data];
 
 		size_t rizos = 0;
-		for (int i = 0; i < test; i++)
+
+		for (int i = 1; i < 30; i++)
 		{
-			std::vector<Vertex> rizo = CreateCube(i, 1, i);
-			
-			rizos += rizo.size();
-
-			if (rizos >= 36 * test)
-				break;
-
-			memcpy(vertices + rizos, rizo.data(), sizeof(Vertex)* rizo.size());
+			for (int j = 1; j < 30; j++)
+			{
+				std::array<Vertex, 36> rizo = CreateCube(i, 1, j);
+				rizos += rizo.size();
+				memcpy(vertices + rizos, rizo.data(), sizeof(Vertex) * rizo.size());
+			}
 		}
-
-		/*std::vector<Vertex> res = CreateCube(2, 2, 3);
-		std::vector<Vertex> res2 = CreateCube(2, 2, 4);
-		std::vector<Vertex> res3 = CreateCube(2, 2, 7);
-
-		memcpy(vertices, res.data(), res.size() * sizeof(Vertex));
-		memcpy(vertices + res.size(), res2.data(), res2.size() * sizeof(Vertex));
-		memcpy(vertices + res.size() + res2.size(), res3.data(), res3.size() * sizeof(Vertex));*/
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-
 
 		glClearColor(0.8, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -448,6 +440,14 @@ int main(void)
 
 		Cube cube(glm::vec3(1, 1, 1));
 		cube.Update(shader.shader_program);
+
+
+		for (auto cube : cubes)
+		{
+			cube.Update(shader.shader_program);
+		}
+
+
 
 		texutre.Bind();
 		texutre2.Bind();
@@ -473,8 +473,6 @@ int main(void)
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		int projectionLoc = glGetUniformLocation(shader.shader_program, "projection");
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-
 
 		glBindVertexArray(0);
 
