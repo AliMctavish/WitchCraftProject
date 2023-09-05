@@ -17,6 +17,7 @@ bool firstMouse = false;
 const float cameraSpeed = 0.05f; // adjust accordingly
 const float gravity = 0.098f;
 const int data_size = 43200;
+Vertex* vertPtr = nullptr;
 
 float velocity = 0.5f;
 
@@ -228,8 +229,7 @@ int main(void)
 	const int data = 1024;
 	while (!glfwWindowShouldClose(window))
 	{
-		Vertex vertices[36 * data];
-
+		Vertex* vertices = new Vertex[36 * data];
 		size_t rizos = 0;
 
 		for (int i = 1; i < 10; i++)
@@ -293,12 +293,12 @@ int main(void)
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 		glBindVertexArray(0);
-
 		processInput(window);
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 		/* Poll for and process events */
 		glfwPollEvents();
+
 	}
 
 	glfwTerminate();
