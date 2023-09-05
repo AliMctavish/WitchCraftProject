@@ -16,8 +16,7 @@ float lastX = 400, lastY = 300;
 bool firstMouse = false;
 const float cameraSpeed = 0.05f; // adjust accordingly
 const float gravity = 0.098f;
-const int data_size = 43200;
-Vertex* vertPtr = nullptr;
+const int data_size = 173200;
 
 float velocity = 0.5f;
 
@@ -207,10 +206,10 @@ int main(void)
 	int counter_z = 1;
 	for (unsigned int i = 1; i < size; i++)
 	{
-		counter_z += 33;
+		counter_z += 10;
 		for (unsigned int j = 1; j < size; j++)
 		{
-			counter_x += 33;
+			counter_x += 10;
 			Cube cube(glm::vec3(counter_x, 0, counter_z));
 			cubes.push_back(cube);
 		}
@@ -218,35 +217,28 @@ int main(void)
 	}
 
 
-	for (unsigned int i = 0; i < cubes.size() - 1; i++)
+	/*for (unsigned int i = 0; i < cubes.size() - 1; i++)
 	{
 		if (cubes[i].GetPosition().y < cubes[i + 1].GetPosition().y)
 			cubes[i + 1].Transform(glm::vec3(3, 3, 3));
-	}
+	}*/
 	float num = 0.1f;
+	const int data_counter = 25;
+	std::vector<Vertex> vertices;
 
-
-	const int data = 1024;
 	while (!glfwWindowShouldClose(window))
 	{
-		Vertex* vertices = new Vertex[36 * data];
 		size_t rizos = 0;
 
-		for (int i = 1; i < 10; i++)
-		{
-			for (int j = 1; j < 10; j++)
-			{
-				for (int k = 1; k < 10; k++)
-				{
-					std::array<Vertex, 36> rizo = CreateCube(i * horizontal_directions, j * horizontal_directions, k * horizontal_directions);
-					rizos += rizo.size();
-					memcpy(vertices + rizos, rizo.data(), sizeof(Vertex) * rizo.size());
-				}
+		for (int i = 1; i < data_counter; i++) {
+			for (int j = 1; j < data_counter; j++) {
+				std::array<Vertex, 36> rizo = CreateCube(i * horizontal_directions, 0, j * horizontal_directions);
+				vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 			}
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
 
 		glClearColor(0.8, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -261,7 +253,6 @@ int main(void)
 
 		for (auto cube : cubes)
 		{
-			cube.Rotate(horizontal_directions, glm::vec3(1, 1, 1));
 			cube.Update(shader.shader_program);
 		}
 
@@ -298,7 +289,7 @@ int main(void)
 		glfwSwapBuffers(window);
 		/* Poll for and process events */
 		glfwPollEvents();
-
+		vertices.clear();
 	}
 
 	glfwTerminate();
