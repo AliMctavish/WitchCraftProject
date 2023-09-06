@@ -185,11 +185,12 @@ int main(void)
 
 	Texture texutre("Assets/surfaceTexture.jpg", GL_RGB);
 	Texture texutre2("Assets/sideTexture.jpg", GL_RGB);
-	Texture texutre3("Assets/dirtTexture.jpg", GL_RGB);
+	Texture texutre3("Assets/dirtTexture.JPG", GL_RGB);
+	Texture texutre4("Assets/stoneTexture.jpg", GL_RGB);
 
 	auto loc = glGetUniformLocation(shader.shader_program, "textureFrag");
-	int samplers[3] = { 0,1,2 };
-	glUniform1iv(loc, 3, samplers);
+	int samplers[4] = { 0,1,2,3 };
+	glUniform1iv(loc, 4, samplers);
 
 	shader.UnBind();
 	glBindVertexArray(0);
@@ -200,7 +201,7 @@ int main(void)
 
 	/* Loop until the user closes the window */
 
-	int size = 6;
+	int size = 2;
 	std::vector<Cube> cubes;
 	int counter_x = 1;
 	int counter_z = 1;
@@ -225,27 +226,36 @@ int main(void)
 	float num = 0.1f;
 	const int data_counter = 15;
 	std::vector<Vertex> vertices;
+	std::vector<int> random_numbers;
+	for (int i = 1; i < 40; i++)
+	{
+		random_numbers.push_back(rand() % 10);
+	}
+
 
 	while (!glfwWindowShouldClose(window))
 	{
+
 		size_t rizos = 0;
 
-		for (int i = 1; i < data_counter; i++) {
-			for (int j = 1; j < data_counter + 5; j++) {
-				for (int k = 1; k < 10; k++)
-				{
-					if (k == 9)
+		for (int i = 1; i < data_counter + random_numbers[i]; i++) {
+				for (int j = 1; j < data_counter + 5; j++) {
+					for (int k = 1; k < 10 - random_numbers[j]; k++)
 					{
-						std::array<Vertex, 36> rizo = CreateCube(i * horizontal_directions, k * horizontal_directions, j * horizontal_directions,2.0f,0.0f,1.0f);
-						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+						if (k == 8)
+						{
+							std::array<Vertex, 36> rizo = CreateCube(i * horizontal_directions , k * horizontal_directions , j * horizontal_directions, 2.0f, 0.0f, 1.0f);
+							vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+						}
+						else
+						{
+							std::array<Vertex, 36> rizo = CreateCube(i * horizontal_directions , k * horizontal_directions , j * horizontal_directions, 2.0f, 2.0f, 2.0f);
+							vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+						}
 					}
-					else
-					{
-						std::array<Vertex, 36> rizo = CreateCube(i * horizontal_directions, k * horizontal_directions, j * horizontal_directions, 0.0f, 0.0f, 2.0f);
-						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
-					}
+					std::array<Vertex, 36> rizo = CreateCube(i * horizontal_directions , 0, j * horizontal_directions, 3.0f, 3.0f, 3.0f);
+					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 				}
-			}
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -272,6 +282,7 @@ int main(void)
 		texutre.Bind();
 		texutre2.Bind();
 		texutre3.Bind();
+		//texutre4.Bind();
 
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && cubes.size() > 0)
 			cubes.pop_back();

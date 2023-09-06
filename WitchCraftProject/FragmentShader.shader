@@ -7,7 +7,7 @@ in vec2 ourTexture;
 in float ourTexIndex;
 
 uniform vec4 colorTest;
-uniform sampler2D textureFrag[3];
+uniform sampler2D textureFrag[4];
 uniform vec4 distance_color;
 
 void main()

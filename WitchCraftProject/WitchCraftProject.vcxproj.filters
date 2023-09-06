@@ -78,5 +78,8 @@
     <Image Include="..\..\..\..\Desktop\surfaceTexture.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\stoneTexture.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

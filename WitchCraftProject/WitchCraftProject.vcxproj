@@ -171,6 +171,7 @@
     <Image Include="..\..\..\..\Desktop\sideTexture.jpg" />
     <Image Include="..\..\..\..\Desktop\surfaceTexture.jpg" />
     <Image Include="..\..\..\..\Downloads\wall.jpg" />
+    <Image Include="Assets\stoneTexture.jpg" />
     <Image Include="half-life-nebula.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
