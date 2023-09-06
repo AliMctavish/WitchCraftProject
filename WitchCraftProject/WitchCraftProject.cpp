@@ -139,15 +139,6 @@ int main(void)
 	}
 
 	glEnable(GL_DEPTH_TEST);
-
-	//HERE IS THE DRAWING DETAILS
-
-	//float* vertices = Geometry::MakeCubevertices();
-
-	//float be[216];
-
-	//for (int i = 0; i < sizeof(be); i++)
-		//be[i] = {vertices[i]};
 	unsigned int indecies[] =
 	{
 		0,1,2,
@@ -200,7 +191,7 @@ int main(void)
 
 	/* Loop until the user closes the window */
 
-	int size = 6;
+	int size = 10;
 	std::vector<Cube> cubes;
 	int counter_x = 1;
 	int counter_z = 1;
@@ -216,25 +207,32 @@ int main(void)
 		counter_x = 1;
 	}
 
-	const int data_counter = 15;
+	const int data_counter = 35;
 	std::vector<Vertex> vertices;
+	std::vector<int> randomness;
+
+	for (int i = 0 ; i < 60 ; i++)
+	{
+		int random = rand() % 10;
+		randomness.push_back(random);
+	}
 
 	while (!glfwWindowShouldClose(window))
 	{
 		size_t rizos = 0;
 
-		for (int i = 1; i < data_counter - random_numbers; i++) {
+		for (int i = 1; i < data_counter; i++) {
 			for (int j = 1; j < data_counter + 5; j++) {
 				for (int k = 1; k < 3 -  random_numbers; k++)
 				{
 					if (k == 2)
 					{
-						std::array<Vertex, 36> rizo = CreateCube(i, k, j, 2.0f, 0.0f, 1.0f);
+						std::array<Vertex, 36> rizo = CreateCube(i, k + randomness[j] / (randomness[i] + 1), j, 2.0f, 0.0f, 1.0f);
 						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 					}
 					else
 					{
-						std::array<Vertex, 36> rizo = CreateCube(i, k, j, 2.0f, 2.0f, 2.0f);
+						std::array<Vertex, 36> rizo = CreateCube(i, k + randomness[j]  / (randomness[i] + 1), j, 2.0f, 2.0f, 2.0f);
 						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 					}
 				}
@@ -245,7 +243,6 @@ int main(void)
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
-
 		glClearColor(0.8, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwSetCursorPosCallback(window, mouse_callback);
