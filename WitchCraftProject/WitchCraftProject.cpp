@@ -225,9 +225,9 @@ int main(void)
 
 		for (int i = 1; i < data_counter - random_numbers; i++) {
 			for (int j = 1; j < data_counter + 5; j++) {
-				for (int k = 1; k < 10 -  random_numbers; k++)
+				for (int k = 1; k < 3 -  random_numbers; k++)
 				{
-					if (k == 9)
+					if (k == 2)
 					{
 						std::array<Vertex, 36> rizo = CreateCube(i, k, j, 2.0f, 0.0f, 1.0f);
 						vertices.insert(vertices.end(), rizo.begin(), rizo.end());

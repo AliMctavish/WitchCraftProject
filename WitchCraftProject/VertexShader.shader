@@ -17,7 +17,7 @@ out float ourTexIndex;
 
 void main()
 {
-gl_Position =  projection * view * model * vec4(vecPos.x + Xoffset,vecPos.y +Yoffset , vecPos.z ,2);
+gl_Position =  projection * view * model * vec4(vecPos.x + Xoffset,vecPos.y +Yoffset , vecPos.z ,1);
 ourTexture = texCoord;
 ourTexIndex = texIndex;
 }
