@@ -1,8 +1,9 @@
 ﻿#include "Cube.h"
 
+int Cube::draw_type = DrawTypes::Tringles;
+
 void Cube::Init()
 {
-	draw_type = DrawTypes::Tringles;
 	_position = glm::vec3(0, 0, 0);
 	_model = glm::mat4(1.0f);
 	move_amount = 0;
@@ -39,7 +40,6 @@ void Cube::Update(unsigned int& shader_program)
 {
 	int modelLoc = glGetUniformLocation(shader_program, "model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(_model));
-	std::cout << draw_type << std::endl;
 	glDrawArrays(draw_type, 0, 36 * 19320);
 }
 

@@ -13,7 +13,7 @@ private:
 	glm::vec3 _position;
 	glm::mat4 _model;
 	float move_amount;
-	int draw_type;
+	static int draw_type;
 public:
 	Cube(glm::vec3 position);
 	void Init();
