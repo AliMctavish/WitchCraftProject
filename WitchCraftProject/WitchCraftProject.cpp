@@ -86,6 +86,7 @@ void processInput(GLFWwindow* window)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 
 
+
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
 		cameraPos.y += cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
@@ -191,7 +192,7 @@ int main(void)
 
 	/* Loop until the user closes the window */
 
-	int size = 3;
+	int size = 2;
 	std::vector<Cube> cubes;
 	int counter_x = 1;
 	int counter_z = 1;
@@ -268,7 +269,15 @@ int main(void)
 
 
 		for (auto cube : cubes)
+		{
+			if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+				cube.SetDrawType(DrawTypes::Tringles);
+			if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+				cube.SetDrawType(DrawTypes::Lines);
+			if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+				cube.SetDrawType(DrawTypes::Points);
 			cube.Update(shader.shader_program);
+		}
 
 
 
