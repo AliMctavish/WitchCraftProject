@@ -68,6 +68,95 @@ static float* MakeCubeVertices()
 	return vertices;
 }
 
+static std::array<Vertex, 6> CreateWallVoxel(float x, float y, float z,float frontTex)
+{
+	//FRONT_FACE
+	Vertex v0;
+	v0.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
+	v0.TexturePosition = { 0.0f, 0.0f };
+	v0.TextureIndex = frontTex;
+	Vertex v1;
+	v1.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
+	v1.TexturePosition = { 1.0f, 0.0f };
+	v1.TextureIndex = frontTex;
+	Vertex v2;
+	v2.Position = { 0.5f + x, 0.5f + y, -0.5f + z };
+	v2.TexturePosition = { 1.0f, 1.0f };
+	v2.TextureIndex = frontTex;
+	Vertex v3;
+	v3.Position = { 0.5f + x, 0.5f + y, -0.5f + z };
+	v3.TexturePosition = { 1.0f, 1.0f };
+	v3.TextureIndex = frontTex;
+	Vertex v4;
+	v4.Position = { -0.5f + x, 0.5f + y, -0.5f + z };
+	v4.TexturePosition = { 0.0f, 1.0f };
+	v4.TextureIndex = frontTex;
+	Vertex v5;
+	v5.Position = { -0.5f + x, -0.5f + y , -0.5f + z };
+	v5.TexturePosition = { 0.0f, 0.0f };
+	v5.TextureIndex = frontTex;
+
+	
+	return { v0,v1,v2,v3,v4,v5};
+}
+
+static std::array<Vertex,12> CreateVoxel(float x, float y, float z, float buttomTex , float sidesTex)
+{
+	//FRONT_FACE
+	Vertex v0;
+	v0.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
+	v0.TexturePosition = { 0.0f, 0.0f };
+	v0.TextureIndex = sidesTex;
+	Vertex v1;
+	v1.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
+	v1.TexturePosition = { 1.0f, 0.0f };
+	v1.TextureIndex = sidesTex;
+	Vertex v2;
+	v2.Position = { 0.5f + x, 0.5f + y, -0.5f + z };
+	v2.TexturePosition = { 1.0f, 1.0f };
+	v2.TextureIndex = sidesTex;
+	Vertex v3;
+	v3.Position = { 0.5f + x, 0.5f + y, -0.5f + z };
+	v3.TexturePosition = { 1.0f, 1.0f };
+	v3.TextureIndex = sidesTex;
+	Vertex v4;
+	v4.Position = { -0.5f + x, 0.5f + y, -0.5f + z };
+	v4.TexturePosition = { 0.0f, 1.0f };
+	v4.TextureIndex = sidesTex;
+	Vertex v5;
+	v5.Position = { -0.5f + x, -0.5f + y , -0.5f + z };
+	v5.TexturePosition = { 0.0f, 0.0f };
+	v5.TextureIndex = sidesTex;
+
+	//BUTTOM
+	Vertex v30;
+	v30.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
+	v30.TexturePosition = { 1.0f, 1.0f };
+	v30.TextureIndex = buttomTex;
+	Vertex v31;
+	v31.Position = { 0.5f + x,  0.5f + y, -0.5f + z };
+	v31.TexturePosition = { 0.0f, 1.0f };
+	v31.TextureIndex = buttomTex;
+	Vertex v32;
+	v32.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v32.TexturePosition = { 0.0f, 0.0f };
+	v32.TextureIndex = buttomTex;
+	Vertex v33;
+	v33.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v33.TexturePosition = { 0.0f, 0.0f };
+	v33.TextureIndex = buttomTex;
+	Vertex v34;
+	v34.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v34.TexturePosition = { 1.0f, 0.0f };
+	v34.TextureIndex = buttomTex;
+	Vertex v35;
+	v35.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
+	v35.TexturePosition = { 1.0f, 1.0f };
+	v35.TextureIndex = buttomTex;
+
+	return { v30,v31,v32,v33,v34,v35,v0,v1,v2,v3,v4,v5 };
+}
+
 
 static std::array<Vertex, 36> CreateCube(float x, float y, float z , float topTex,float buttomTex , float sidesTex)
 {

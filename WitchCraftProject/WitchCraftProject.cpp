@@ -16,7 +16,7 @@ float lastX = 400, lastY = 300;
 bool firstMouse = false;
 const float cameraSpeed = 0.5f; // adjust accordingly
 const float gravity = 0.098f;
-const int data_size = 673200;
+const int data_size = 25673200;
 int random_numbers;
 float velocity = 0.5f;
 glm::vec3 cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
@@ -192,7 +192,7 @@ int main(void)
 
 	/* Loop until the user closes the window */
 
-	int size = 2;
+	int size = 1;
 	std::vector<Cube> cubes;
 	int counter_x = 1;
 	int counter_z = 1;
@@ -208,39 +208,70 @@ int main(void)
 		counter_x = 1;
 	}
 
-	const int data_counter = 50;
+	int data_counter = 460;
 	std::vector<Vertex> vertices;
 	std::vector<int> randomness;
 
-	for (int i = 0 ; i < 60 ; i++)
+	for (int i = 0; i < 460; i++)
 	{
-		int random = rand() % 15;
+		int random = rand() % 10;
 		randomness.push_back(random);
 	}
+
+
+	for (int i = 1; i < data_counter; i++) {
+		for (int j = 1; j < data_counter; j++) {
+			for (int k = 1; k < randomness[j]; k++)
+			{
+				if (k == randomness[j] - 1)
+				{
+					std::array<Vertex, 12> rizo = CreateVoxel(i, k, j, 0.0f, 1.0f);
+					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+				}
+				else
+				{
+					if (!vertices.empty())
+					{
+						if (vertices[j].Position.v0 > 1)
+						{
+							vertices[j].TextureIndex = 0.0f;
+						}
+						std::array<Vertex, 6> rizo = CreateWallVoxel(i, k, j, 2.0f);
+						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+					}
+				}
+			}
+			std::array<Vertex, 12> rizo = CreateVoxel(i, 0, j, 3.0f, 3.0f);
+			vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+		}
+	}
+
+
+
+	//for (int i = 1; i < data_counter - 4; i++) {
+	//	for (int j = 1; j < data_counter ; j++) {
+	//		for (int k = 1; k < randomness[j]; k++)
+	//		{
+	//			if (k == randomness[j] - 1)
+	//			{
+	//				std::array<Vertex, 36> rizo = CreateCube(i, k + randomness[j] / (randomness[i] + 3), j, 2.0f, 0.0f, 1.0f);
+	//				vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+	//			}
+	//			else
+	//			{
+	//				std::array<Vertex, 36> rizo = CreateCube(i, k + randomness[j] / (randomness[i] + 3), j, 2.0f, 2.0f, 2.0f);
+	//				vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+	//			}
+	//		}
+	//		std::array<Vertex, 36> rizo = CreateCube(i, 0, j, 3.0f, 3.0f, 3.0f);
+	//		vertices.insert(vertices.end(), rizo.begin(), rizo.end());
+	//	}
+	//}
 
 	while (!glfwWindowShouldClose(window))
 	{
 		size_t rizos = 0;
 
-		for (int i = 1; i < data_counter - 4; i++) {
-			for (int j = 1; j < data_counter + 5; j++) {
-				for (int k = 1; k < randomness[j]; k++)
-				{
-					if (k == randomness[j] - 1)
-					{
-						std::array<Vertex, 36> rizo = CreateCube(i, k + randomness[j] / (randomness[i] + 3) , j, 2.0f, 0.0f, 1.0f);
-						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
-					}
-					else
-					{
-						std::array<Vertex, 36> rizo = CreateCube(i, k + randomness[j]  / (randomness[i] + 3), j, 2.0f, 2.0f, 2.0f);
-						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
-					}
-				}
-				std::array<Vertex, 36> rizo = CreateCube(i, 0, j, 3.0f, 3.0f, 3.0f);
-				vertices.insert(vertices.end(), rizo.begin(), rizo.end());
-			}
-		}
 
 
 		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
@@ -249,35 +280,37 @@ int main(void)
 			vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 		}
 
-
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && vertices.size() > 0)
-			vertices.pop_back();
-
-
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+
 		glClearColor(0.8, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwSetCursorPosCallback(window, mouse_callback);
 
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+			std::cout << vertices.size()  << std::endl;
+
+
 		shader.Bind();
 		glBindVertexArray(VAO);
 
-		//Cube cube(glm::vec3(1, 1, 1));
-		//cube.Update(shader.shader_program);
+		Cube cube(glm::vec3(1, 1, 1));
+		cube.Update(shader.shader_program);
 
 
-		for (auto cube : cubes)
-		{
-			if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-				cube.SetDrawType(DrawTypes::Tringles);
-			if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-				cube.SetDrawType(DrawTypes::Lines);
-			if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-				cube.SetDrawType(DrawTypes::Points);
-			cube.Update(shader.shader_program);
-		}
+
+
+		//for (auto cube : cubes)
+		//{
+		//	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		//		cube.SetDrawType(DrawTypes::Tringles);
+		//	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		//		cube.SetDrawType(DrawTypes::Lines);
+		//	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+		//		cube.SetDrawType(DrawTypes::Points);
+		//	cube.Update(shader.shader_program);
+		//}
 
 
 
@@ -288,12 +321,11 @@ int main(void)
 		texutre4.Bind();
 
 
-
 		glm::mat4 view;
 		view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
 
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), 1200.f / 800.f, 0.1f, 10000.0f);
+		projection = glm::perspective(glm::radians(45.0f), 1200.f / 800.f, 0.1f, 1000.0f);
 
 		int viewLoc = glGetUniformLocation(shader.shader_program, "view");
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));

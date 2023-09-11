@@ -40,7 +40,7 @@ void Cube::Update(unsigned int& shader_program)
 {
 	int modelLoc = glGetUniformLocation(shader_program, "model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(_model));
-	glDrawArrays(draw_type, 0, 36 * 19320);
+	glDrawArrays(draw_type, 0, 36 * 309320);
 }
 
 
