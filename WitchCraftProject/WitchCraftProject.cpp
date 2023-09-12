@@ -230,21 +230,15 @@ int main(void)
 				}
 				else
 				{
-					if (!vertices.empty())
-					{
-						if (vertices[j].Position.v0 > 1)
-						{
-							vertices[j].TextureIndex = 0.0f;
-						}
-						std::array<Vertex, 6> rizo = CreateWallVoxel(i, k, j, 2.0f);
-						vertices.insert(vertices.end(), rizo.begin(), rizo.end());
-					}
+					std::array<Vertex, 6> rizo = CreateWallVoxel(i , k, j , 2.0f);
+					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 				}
 			}
-			std::array<Vertex, 12> rizo = CreateVoxel(i, 0, j, 3.0f, 3.0f);
+			std::array<Vertex, 6> rizo = CreateGroundVoxel(i, 0, j, 3.0f);
 			vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 		}
 	}
+
 
 
 
@@ -267,10 +261,17 @@ int main(void)
 	//		vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 	//	}
 	//}
-
+	int increase = 1;
 	while (!glfwWindowShouldClose(window))
 	{
+
 		size_t rizos = 0;
+
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			//	increase++;
+		}
+
 
 
 
@@ -280,16 +281,15 @@ int main(void)
 			vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 		}
 
-		
+
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+
 
 		glClearColor(0.8, 1, 1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwSetCursorPosCallback(window, mouse_callback);
 
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			std::cout << vertices.size()  << std::endl;
 
 
 		shader.Bind();
@@ -338,6 +338,8 @@ int main(void)
 		glfwSwapBuffers(window);
 		/* Poll for and process events */
 		glfwPollEvents();
+
+
 		vertices.clear();
 	}
 

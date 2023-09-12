@@ -68,8 +68,50 @@ static float* MakeCubeVertices()
 	return vertices;
 }
 
-static std::array<Vertex, 6> CreateWallVoxel(float x, float y, float z,float frontTex)
+static std::array<Vertex, 6> CreateGroundVoxel(float x, float y, float z, float buttomTex)
 {
+	//BUTTOM
+	Vertex v30;
+	v30.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
+	v30.TexturePosition = { 1.0f, 1.0f };
+	v30.TextureIndex = buttomTex;
+	Vertex v31;
+	v31.Position = { 0.5f + x,  0.5f + y, -0.5f + z };
+	v31.TexturePosition = { 0.0f, 1.0f };
+	v31.TextureIndex = buttomTex;
+	Vertex v32;
+	v32.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v32.TexturePosition = { 0.0f, 0.0f };
+	v32.TextureIndex = buttomTex;
+	Vertex v33;
+	v33.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v33.TexturePosition = { 0.0f, 0.0f };
+	v33.TextureIndex = buttomTex;
+	Vertex v34;
+	v34.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v34.TexturePosition = { 1.0f, 0.0f };
+	v34.TextureIndex = buttomTex;
+	Vertex v35;
+	v35.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
+	v35.TexturePosition = { 1.0f, 1.0f };
+	v35.TextureIndex = buttomTex;
+
+
+	return { v30,v31,v32,v33,v34,v35 };
+}
+
+float last_x, last_y, last_z;
+
+void CheckWall(float x, float y, float z)
+{
+
+}
+
+static std::array<Vertex, 6> CreateWallVoxel(float x, float y, float z, float frontTex)
+{
+
+	z += 1;
+
 	//FRONT_FACE
 	Vertex v0;
 	v0.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
@@ -96,11 +138,11 @@ static std::array<Vertex, 6> CreateWallVoxel(float x, float y, float z,float fro
 	v5.TexturePosition = { 0.0f, 0.0f };
 	v5.TextureIndex = frontTex;
 
-	
-	return { v0,v1,v2,v3,v4,v5};
+
+	return { v0,v1,v2,v3,v4,v5 };
 }
 
-static std::array<Vertex,12> CreateVoxel(float x, float y, float z, float buttomTex , float sidesTex)
+static std::array<Vertex, 12> CreateVoxel(float x, float y, float z, float buttomTex, float sidesTex)
 {
 	//FRONT_FACE
 	Vertex v0;
@@ -158,7 +200,7 @@ static std::array<Vertex,12> CreateVoxel(float x, float y, float z, float buttom
 }
 
 
-static std::array<Vertex, 36> CreateCube(float x, float y, float z , float topTex,float buttomTex , float sidesTex)
+static std::array<Vertex, 36> CreateCube(float x, float y, float z, float topTex, float buttomTex, float sidesTex)
 {
 	float size = 1.0f;
 	//FRONT_FACE
