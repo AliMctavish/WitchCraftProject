@@ -107,10 +107,42 @@ void CheckWall(float x, float y, float z)
 
 }
 
+
+static std::array<Vertex, 6> CreateBackWallVoxel(float x, float y, float z, float backTex)
+{
+	//BACK_FACE
+	Vertex v6;
+	v6.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v6.TexturePosition = { 0.0,0.0 };
+	v6.TextureIndex = backTex;
+	Vertex v7;
+	v7.Position = { 0.5f + x, -0.5f + y,  0.5f + z };
+	v7.TexturePosition = { 1.0f,0.0f };
+	v7.TextureIndex = backTex;
+	Vertex v8;
+	v8.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v8.TexturePosition = { 1.0f,1.0f };
+	v8.TextureIndex = backTex;
+	Vertex v9;
+	v9.Position = { 0.5f + x,0.5f + y,0.5f + z };
+	v9.TexturePosition = { 1.0f,1.0f };
+	v9.TextureIndex = backTex;
+	Vertex v10;
+	v10.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v10.TexturePosition = { 0.0f, 1.0f };
+	v10.TextureIndex = backTex;
+	Vertex v11;
+	v11.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v11.TexturePosition = { 0.0f, 0.0f };
+	v11.TextureIndex = backTex;
+
+
+	return { v6,v7,v8,v9,v10,v11 };
+
+}
+
 static std::array<Vertex, 6> CreateWallVoxel(float x, float y, float z, float frontTex)
 {
-
-	z += 1;
 
 	//FRONT_FACE
 	Vertex v0;

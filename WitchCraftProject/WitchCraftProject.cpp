@@ -208,11 +208,11 @@ int main(void)
 		counter_x = 1;
 	}
 
-	int data_counter = 460;
+	int data_counter = 560;
 	std::vector<Vertex> vertices;
 	std::vector<int> randomness;
 
-	for (int i = 0; i < 460; i++)
+	for (int i = 0; i < 560; i++)
 	{
 		int random = rand() % 10;
 		randomness.push_back(random);
@@ -221,16 +221,16 @@ int main(void)
 
 	for (int i = 1; i < data_counter; i++) {
 		for (int j = 1; j < data_counter; j++) {
-			for (int k = 1; k < randomness[j]; k++)
+			for (int k = 1; k < randomness[j] + randomness[i]; k++)
 			{
-				if (k == randomness[j] - 1)
+				if (k == randomness[j] + randomness[i] - 1)
 				{
 					std::array<Vertex, 12> rizo = CreateVoxel(i, k, j, 0.0f, 1.0f);
 					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 				}
 				else
 				{
-					std::array<Vertex, 6> rizo = CreateWallVoxel(i , k, j , 2.0f);
+					std::array<Vertex, 6> rizo = CreateWallVoxel(i, k, j, 2.0f);
 					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 				}
 			}
@@ -238,8 +238,6 @@ int main(void)
 			vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 		}
 	}
-
-
 
 
 	//for (int i = 1; i < data_counter - 4; i++) {
@@ -261,6 +259,9 @@ int main(void)
 	//		vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 	//	}
 	//}
+
+
+
 	int increase = 1;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -325,7 +326,7 @@ int main(void)
 		view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
 
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), 1200.f / 800.f, 0.1f, 1000.0f);
+		projection = glm::perspective(glm::radians(45.0f), 1200.f / 800.f, 0.1f, 100.0f);
 
 		int viewLoc = glGetUniformLocation(shader.shader_program, "view");
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
