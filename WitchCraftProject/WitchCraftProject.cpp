@@ -218,7 +218,6 @@ int main(void)
 		randomness.push_back(random);
 	}
 
-
 	for (int i = 1; i < data_counter; i++) {
 		for (int j = 1; j < data_counter; j++) {
 			for (int k = 1; k < randomness[j] + randomness[i]; k++)
@@ -238,6 +237,14 @@ int main(void)
 			vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 		}
 	}
+
+	for (auto i = vertices.begin(); i < vertices.end(); i++)
+	{
+		if (i->Position.v0 < 5)
+			//std::cout << i->Position.v0 << std::endl;
+	}
+
+
 
 
 	//for (int i = 1; i < data_counter - 4; i++) {
