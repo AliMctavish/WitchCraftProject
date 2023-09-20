@@ -208,7 +208,7 @@ int main(void)
 		counter_x = 1;
 	}
 
-	int data_counter = 560;
+	int data_counter = 5;
 	std::vector<Vertex> vertices;
 	std::vector<int> randomness;
 
@@ -220,9 +220,10 @@ int main(void)
 
 	for (int i = 1; i < data_counter; i++) {
 		for (int j = 1; j < data_counter; j++) {
-			for (int k = 1; k < randomness[j] + randomness[i]; k++)
+			auto rando = rand() % i;
+			for (int k = 1; k < randomness[j] + randomness[i] - rando; k++)
 			{
-				if (k == randomness[j] + randomness[i] - 1)
+				if (k == randomness[j] + randomness[i] - 1 - rando)
 				{
 					std::array<Vertex, 12> rizo = CreateVoxel(i, k, j, 0.0f, 1.0f);
 					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
@@ -238,11 +239,22 @@ int main(void)
 		}
 	}
 
-	for (auto i = vertices.begin(); i < vertices.end(); i++)
+
+	for (int i = 0; i < vertices.size(); i++)
 	{
-		if (i->Position.v0 < 5)
-			//std::cout << i->Position.v0 << std::endl;
+		if (i < vertices.size() - 5)
+		{
+			//if (vertices[i].Position.v2 < vertices[i + 10].Position.v2)
+				vertices[i + 1].TextureIndex = 2;
+		}
 	}
+
+
+	//for (auto i = vertices.begin(); i < vertices.end(); i++)
+	//{
+	//	if (i->Position.v0 < i->Position.v0)
+	//		//std::cout << i->Position.v0 << std::endl;
+	//}
 
 
 
@@ -275,11 +287,6 @@ int main(void)
 
 		size_t rizos = 0;
 
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		{
-			//	increase++;
-		}
-
 
 
 
@@ -307,6 +314,12 @@ int main(void)
 		cube.Update(shader.shader_program);
 
 
+
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS )
+		{
+			//increase++ % 10;
+			//vertices[increase].TextureIndex = 3;
+		}
 
 
 		//for (auto cube : cubes)
