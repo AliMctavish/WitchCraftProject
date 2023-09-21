@@ -4,7 +4,6 @@
 #include "Cube.h"
 #include <array>
 #include "Geometry.h"
-
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH  1200
 
@@ -24,7 +23,6 @@ glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 glm::vec3 direction;
 glm::vec3 cameraRight = glm::normalize(glm::cross(cameraFront, cameraUp));
-
 float yaw = 1;
 float pitch = 1;
 
@@ -208,7 +206,7 @@ int main(void)
 		counter_x = 1;
 	}
 
-	int data_counter = 5;
+	int data_counter = 200;
 	std::vector<Vertex> vertices;
 	std::vector<int> randomness;
 
@@ -219,18 +217,19 @@ int main(void)
 	}
 
 	for (int i = 1; i < data_counter; i++) {
-		for (int j = 1; j < data_counter; j++) {
-			auto rando = rand() % i;
-			for (int k = 1; k < randomness[j] + randomness[i] - rando; k++)
+		auto rando_y = i % 10;
+		for (int j = 1; j < randomness[i] + data_counter - rando_y; j++) {
+			auto rando = j %10 ;
+			for (int k = 1; k < randomness[j] + randomness[i] - rando + rando_y; k++)
 			{
-				if (k == randomness[j] + randomness[i] - 1 - rando)
+				if (k == randomness[j] + randomness[i] - 1 - rando + rando_y)
 				{
-					std::array<Vertex, 12> rizo = CreateVoxel(i, k, j, 0.0f, 1.0f);
+					std::array<Vertex, 30> rizo = CreateVoxel(i, k, j, 0.0f, 1.0f);
 					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 				}
 				else
 				{
-					std::array<Vertex, 6> rizo = CreateWallVoxel(i, k, j, 2.0f);
+					std::array<Vertex, 24> rizo = CreateWallVoxel(i, k, j, 2.0f);
 					vertices.insert(vertices.end(), rizo.begin(), rizo.end());
 				}
 			}
@@ -240,14 +239,14 @@ int main(void)
 	}
 
 
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		if (i < vertices.size() - 5)
-		{
-			//if (vertices[i].Position.v2 < vertices[i + 10].Position.v2)
-				vertices[i + 1].TextureIndex = 2;
-		}
-	}
+	//for (int i = 0; i < vertices.size(); i++)
+	//{
+	//	if (i < vertices.size() - 5)
+	//	{
+	//		//if (vertices[i].Position.v2 < vertices[i + 10].Position.v2)
+	//			vertices[i + 1].TextureIndex = 2;
+	//	}
+	//}
 
 
 	//for (auto i = vertices.begin(); i < vertices.end(); i++)

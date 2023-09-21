@@ -141,7 +141,7 @@ static std::array<Vertex, 6> CreateBackWallVoxel(float x, float y, float z, floa
 
 }
 
-static std::array<Vertex, 6> CreateWallVoxel(float x, float y, float z, float frontTex)
+static std::array<Vertex, 24> CreateWallVoxel(float x, float y, float z, float frontTex)
 {
 
 	//FRONT_FACE
@@ -169,12 +169,88 @@ static std::array<Vertex, 6> CreateWallVoxel(float x, float y, float z, float fr
 	v5.Position = { -0.5f + x, -0.5f + y , -0.5f + z };
 	v5.TexturePosition = { 0.0f, 0.0f };
 	v5.TextureIndex = frontTex;
+	//BACK_FACE
+	Vertex v6;
+	v6.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v6.TexturePosition = { 0.0,0.0 };
+	v6.TextureIndex = frontTex;
+	Vertex v7;
+	v7.Position = { 0.5f + x, -0.5f + y,  0.5f + z };
+	v7.TexturePosition = { 1.0f,0.0f };
+	v7.TextureIndex = frontTex;
+	Vertex v8;
+	v8.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v8.TexturePosition = { 1.0f,1.0f };
+	v8.TextureIndex = frontTex;
+	Vertex v9;
+	v9.Position = { 0.5f + x,0.5f + y,0.5f + z };
+	v9.TexturePosition = { 1.0f,1.0f };
+	v9.TextureIndex = frontTex;
+	Vertex v10;
+	v10.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v10.TexturePosition = { 0.0f, 1.0f };
+	v10.TextureIndex = frontTex;
+	Vertex v11;
+	v11.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v11.TexturePosition = { 0.0f, 0.0f };
+	v11.TextureIndex = frontTex;
+
+	//SIDES
+	Vertex v12;
+	v12.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v12.TexturePosition = { 1.0f, 1.0f };
+	v12.TextureIndex = frontTex;
+	Vertex v13;
+	v13.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
+	v13.TexturePosition = { 0.0f, 1.0f };
+	v13.TextureIndex = frontTex;
+	Vertex v14;
+	v14.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
+	v14.TexturePosition = { 0.0f, 0.0f };
+	v14.TextureIndex = frontTex;
+	Vertex v15;
+	v15.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
+	v15.TexturePosition = { 0.0f, 0.0f };
+	v15.TextureIndex = frontTex;
+	Vertex v16;
+	v16.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v16.TexturePosition = { 1.0f, 0.0f };
+	v16.TextureIndex = frontTex;
+	Vertex v17;
+	v17.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v17.TexturePosition = { 1.0f, 1.0f };
+	v17.TextureIndex = frontTex;
+	//SIDES_2
+	Vertex v18;
+	v18.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v18.TexturePosition = { 1.0f, 1.0f };
+	v18.TextureIndex = frontTex;
+	Vertex v19;
+	v19.Position = { 0.5f + x,  0.5f + y, -0.5f + z };
+	v19.TexturePosition = { 0.0f, 1.0f };
+	v19.TextureIndex = frontTex;
+	Vertex v20;
+	v20.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
+	v20.TexturePosition = { 0.0f, 0.0f };
+	v20.TextureIndex = frontTex;
+	Vertex v21;
+	v21.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
+	v21.TexturePosition = { 0.0f, 0.0f };
+	v21.TextureIndex = frontTex;
+	Vertex v22;
+	v22.Position = { 0.5f + x, -0.5f + y,  0.5f + z };
+	v22.TexturePosition = { 1.0f, 0.0f };
+	v22.TextureIndex = frontTex;
+	Vertex v23;
+	v23.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v23.TexturePosition = { 1.0f, 1.0f };
+	v23.TextureIndex = frontTex;
 
 
-	return { v0,v1,v2,v3,v4,v5 };
+	return { v0,v1,v2,v3,v4,v5 , v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23 ,v6,v7,v8,v9,v10,v11};
 }
 
-static std::array<Vertex, 12> CreateVoxel(float x, float y, float z, float buttomTex, float sidesTex)
+static std::array<Vertex,30> CreateVoxel(float x, float y, float z, float buttomTex, float sidesTex)
 {
 	//FRONT_FACE
 	Vertex v0;
@@ -227,8 +303,83 @@ static std::array<Vertex, 12> CreateVoxel(float x, float y, float z, float butto
 	v35.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
 	v35.TexturePosition = { 1.0f, 1.0f };
 	v35.TextureIndex = buttomTex;
+	//SIDES
+	Vertex v12;
+	v12.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v12.TexturePosition = { 1.0f, 1.0f };
+	v12.TextureIndex = sidesTex;
+	Vertex v13;
+	v13.Position = { -0.5f + x,  0.5f + y, -0.5f + z };
+	v13.TexturePosition = { 0.0f, 1.0f };
+	v13.TextureIndex = sidesTex;
+	Vertex v14;
+	v14.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
+	v14.TexturePosition = { 0.0f, 0.0f };
+	v14.TextureIndex = sidesTex;
+	Vertex v15;
+	v15.Position = { -0.5f + x, -0.5f + y, -0.5f + z };
+	v15.TexturePosition = { 0.0f, 0.0f };
+	v15.TextureIndex = sidesTex;
+	Vertex v16;
+	v16.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v16.TexturePosition = { 1.0f, 0.0f };
+	v16.TextureIndex = sidesTex;
+	Vertex v17;
+	v17.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v17.TexturePosition = { 1.0f, 1.0f };
+	v17.TextureIndex = sidesTex;
+	//SIDES_2
+	Vertex v18;
+	v18.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v18.TexturePosition = { 1.0f, 1.0f };
+	v18.TextureIndex = sidesTex;
+	Vertex v19;
+	v19.Position = { 0.5f + x,  0.5f + y, -0.5f + z };
+	v19.TexturePosition = { 0.0f, 1.0f };
+	v19.TextureIndex = sidesTex;
+	Vertex v20;
+	v20.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
+	v20.TexturePosition = { 0.0f, 0.0f };
+	v20.TextureIndex = sidesTex;
+	Vertex v21;
+	v21.Position = { 0.5f + x, -0.5f + y, -0.5f + z };
+	v21.TexturePosition = { 0.0f, 0.0f };
+	v21.TextureIndex = sidesTex;
+	Vertex v22;
+	v22.Position = { 0.5f + x, -0.5f + y,  0.5f + z };
+	v22.TexturePosition = { 1.0f, 0.0f };
+	v22.TextureIndex = sidesTex;
+	Vertex v23;
+	v23.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v23.TexturePosition = { 1.0f, 1.0f };
+	v23.TextureIndex = sidesTex;
+	//BACK_FACE
+	Vertex v6;
+	v6.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v6.TexturePosition = { 0.0,0.0 };
+	v6.TextureIndex = sidesTex;
+	Vertex v7;
+	v7.Position = { 0.5f + x, -0.5f + y,  0.5f + z };
+	v7.TexturePosition = { 1.0f,0.0f };
+	v7.TextureIndex = sidesTex;
+	Vertex v8;
+	v8.Position = { 0.5f + x,  0.5f + y,  0.5f + z };
+	v8.TexturePosition = { 1.0f,1.0f };
+	v8.TextureIndex = sidesTex;
+	Vertex v9;
+	v9.Position = { 0.5f + x,0.5f + y,0.5f + z };
+	v9.TexturePosition = { 1.0f,1.0f };
+	v9.TextureIndex = sidesTex;
+	Vertex v10;
+	v10.Position = { -0.5f + x,  0.5f + y,  0.5f + z };
+	v10.TexturePosition = { 0.0f, 1.0f };
+	v10.TextureIndex = sidesTex;
+	Vertex v11;
+	v11.Position = { -0.5f + x, -0.5f + y,  0.5f + z };
+	v11.TexturePosition = { 0.0f, 0.0f };
+	v11.TextureIndex = sidesTex;
 
-	return { v30,v31,v32,v33,v34,v35,v0,v1,v2,v3,v4,v5 };
+	return { v30,v31,v32,v33,v34,v35,v0,v1,v2,v3,v4,v5,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v6,v7,v8,v9,v10,v11 };
 }
 
 
